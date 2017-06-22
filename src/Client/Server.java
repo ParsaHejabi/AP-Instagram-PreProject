@@ -80,8 +80,3 @@ public class Server {
         fileOutputStream.close();
     }
 }
-//class Test{
-//    public static void main(String[] args) {
-//        System.out.println(Server.profilesDir.getAbsolutePath());
-//    }
-//}
