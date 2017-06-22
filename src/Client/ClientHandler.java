@@ -2,6 +2,7 @@ package Client;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,7 +71,28 @@ public class ClientHandler implements Runnable{
                         clientOutputStream.flush();
                         String fullName = clientInputStream.readUTF();
                         String biography = clientInputStream.readUTF();
-                        Profile profile = new Profile(email,password,username,fullName,biography);
+                        String pictureStatus = clientInputStream.readUTF();
+
+                        Profile profile = null;
+                        if (pictureStatus.equals("Pic"))
+                        {
+                            File dir = new File(Server.profilesDir, username+"/");
+                            dir.mkdirs();
+                            File profilePic = new File(dir,"profilePic");
+                            profilePic.createNewFile();
+                            byte[] bytes = ((byte[]) clientInputStream.readObject());
+                            Files.write(profilePic.toPath(),bytes );
+                            profile = new Profile(email,password,username,fullName,biography, profilePic);
+                        }
+                        else if (pictureStatus.equals("Skip"))
+                        {
+                            File file = new File(Server.profilesDir, username+"/");
+                            File profilePic = new File(file,"profilePic");
+                            File defaultProfilePic = new File("Assets/defaultProfilePicture.png");
+                            Files.write(profilePic.toPath(), Files.readAllBytes(defaultProfilePic.toPath()));
+                            profile = new Profile(email,password,username,fullName,biography, profilePic);
+                        }
+
                         Server.profiles.add(profile);
                         Server.serialize(profile);
                         login(username);

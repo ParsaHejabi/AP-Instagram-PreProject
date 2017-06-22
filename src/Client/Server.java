@@ -1,5 +1,8 @@
 package Client;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Server {
 
-    static final int SERVER_PORT = 8080;
+    static final int SERVER_PORT = 12400;
     static ServerSocket serverSocket;
     static Socket clientSocket;
     static ArrayList<Thread> clients;
@@ -70,7 +73,9 @@ public class Server {
         return p;
     }
     public static void serialize(Profile profile) throws IOException {
-        File f = new File(profilesDir,profile.username);
+        System.out.println("profilesDir = " + profilesDir);
+        System.out.println("profile.username = " + profile.username);
+        File f = new File(profilesDir,profile.username+"/" + profile.username);
         System.out.println("Is file " + f.getName() + " created? " + f.createNewFile());
         FileOutputStream fileOutputStream = new FileOutputStream(f);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);

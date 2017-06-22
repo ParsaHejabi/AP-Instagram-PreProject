@@ -4,8 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import static Client.Client.clientInputStream;
 
@@ -32,6 +35,8 @@ public class ClientUIController {
     PasswordField passwordLoginPasswordField;
     @FXML
     Button loginButton;
+
+    File picture;
 
     public void goToLoginPage() {
         Scene scene = null;
@@ -92,7 +97,34 @@ public class ClientUIController {
         Client.clientOutputStream.flush();
         Client.clientOutputStream.writeUTF(biography);
         Client.clientOutputStream.flush();
-        Client.profileOwner = (Profile) clientInputStream.readObject();
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("signupPage3.fxml")));
+        scene.getStylesheets().add("Stylesheet/style.css");
+        ClientUI.sceneChanger(scene, "Set ProfilePicture");
+
+    }
+
+    public void selectPicture()
+    {
+        FileChooser fileChooser = new FileChooser();
+        picture = fileChooser.showOpenDialog(null);
+
+    }
+
+    public void signUp3() throws IOException, ClassNotFoundException {
+        if(picture != null)
+        {
+            Client.clientOutputStream.writeUTF("Pic");
+            Client.clientOutputStream.flush();
+            Client.clientOutputStream.writeObject(Files.readAllBytes(picture.toPath()));
+            Client.clientOutputStream.flush();
+            Client.profileOwner = ((Profile) Client.clientInputStream.readObject());
+        }
+        else {
+            Client.clientOutputStream.writeUTF("Skip");
+            Client.clientOutputStream.flush();
+            Client.profileOwner = ((Profile) Client.clientInputStream.readObject());
+
+        }
     }
     public void logIn() throws IOException, ClassNotFoundException {
         String usernameOrEmail = emailOrUsernameLoginTextField.getText();
