@@ -125,6 +125,9 @@ public class ClientUIController {
             Client.profileOwner = ((Profile) Client.clientInputStream.readObject());
 
         }
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("homePage.fxml")));
+        scene.getStylesheets().add("Stylesheet/style.css");
+        ClientUI.sceneChanger(scene, "Home");
     }
     public void logIn() throws IOException, ClassNotFoundException {
         String usernameOrEmail = emailOrUsernameLoginTextField.getText();
@@ -138,6 +141,9 @@ public class ClientUIController {
         boolean serverResponse = Client.clientInputStream.readBoolean();
         if (serverResponse){
             Client.profileOwner = (Profile) clientInputStream.readObject();
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("homePage.fxml")));
+            scene.getStylesheets().add("Stylesheet/style.css");
+            ClientUI.sceneChanger(scene, "Home");
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
