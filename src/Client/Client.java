@@ -52,4 +52,9 @@ public class Client {
         clientInputStream.close();
         clientOutputStream.close();
     }
+
+    static void refreshOwner() throws IOException, ClassNotFoundException
+    {
+        Client.profileOwner = (Profile) clientInputStream.readObject();
+    }
 }

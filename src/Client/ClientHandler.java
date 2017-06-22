@@ -1,5 +1,9 @@
 package Client;
 
+import javafx.scene.Scene;
+import javafx.scene.layout.FlowPane;
+
+import javax.swing.text.html.ListView;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -14,6 +18,7 @@ public class ClientHandler implements Runnable{
     ObjectOutputStream clientOutputStream;
     ObjectInputStream clientInputStream;
     String clientMessage;
+    String username;
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     public static boolean isEmailValid(String emailStr) {
@@ -53,6 +58,7 @@ public class ClientHandler implements Runnable{
                             clientOutputStream.writeBoolean(true);
                             clientOutputStream.flush();
                             login(usernameOrEmail);
+                            break;
                         }
                         else{
                             clientOutputStream.writeBoolean(false);
@@ -96,6 +102,7 @@ public class ClientHandler implements Runnable{
                         Server.profiles.add(profile);
                         Server.serialize(profile);
                         login(username);
+                        break;
                     }
                     else if (registerStatus.equals("Email")){
                         clientOutputStream.writeUTF("Email");
@@ -108,6 +115,22 @@ public class ClientHandler implements Runnable{
                 }
 
             }while (!clientMessage.equals("Exit"));
+            do {
+                clientMessage = clientInputStream.readUTF();
+                if (clientMessage.equals("Profile1"))
+                {
+                    refreshClientOwner(profileFinder(username));
+                }
+                else if ( clientMessage.equals("Profile2"))
+                {
+                    refreshClientOwner(profileFinder(username));
+                }
+                else if (clientMessage.equals("Home"))
+                {
+                    refreshClientOwner(profileFinder(username));
+                }
+            }while (clientMessage.equals("Exit"));
+
             System.out.println(Thread.currentThread().getName() + " is closed!");
         }catch (Exception e){
             e.printStackTrace();
@@ -115,7 +138,9 @@ public class ClientHandler implements Runnable{
     }
 
     private void login(String usernameOrEmail) throws IOException {
-        clientOutputStream.writeObject(profileFinder(usernameOrEmail));
+        Profile p = profileFinder(usernameOrEmail);
+        username = p.username;
+        clientOutputStream.writeObject(p);
         clientOutputStream.flush();
     }
 
@@ -165,4 +190,11 @@ public class ClientHandler implements Runnable{
         return null;
     }
 
+    private void refreshClientOwner(Profile profile) throws IOException
+    {
+        Server.serialize(profile);
+        clientOutputStream.writeObject(profile);
+        clientOutputStream.flush();
+
+    }
 }

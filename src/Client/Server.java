@@ -60,7 +60,10 @@ public class Server {
         File[] serializedProfiles = profilesDir.listFiles();
         if (serializedProfiles!=null){
             for (File f:serializedProfiles){
-                profiles.add(deserialize(f));
+
+                File ff = new File(f, f.getName());
+                profiles.add(deserialize(ff));
+
             }
         }
     }
@@ -76,7 +79,11 @@ public class Server {
         System.out.println("profilesDir = " + profilesDir);
         System.out.println("profile.username = " + profile.username);
         File f = new File(profilesDir,profile.username+"/" + profile.username);
-        System.out.println("Is file " + f.getName() + " created? " + f.createNewFile());
+        if(!f.createNewFile())
+        {
+            f.delete();
+            f.createNewFile();
+        }
         FileOutputStream fileOutputStream = new FileOutputStream(f);
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
         objectOutputStream.writeObject(profile);
