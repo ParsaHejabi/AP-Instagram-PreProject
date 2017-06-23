@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by parsahejabi on 6/21/17.
@@ -90,5 +91,18 @@ public class Server {
         objectOutputStream.flush();
         objectOutputStream.close();
         fileOutputStream.close();
+    }
+
+    static ArrayList<Profile> search(String token)
+    {
+        ArrayList<Profile> ps = new ArrayList<>(5);
+        Iterator<Profile> it = profiles.iterator();
+        while (ps.size()<5 && it.hasNext())
+        {
+            Profile p = it.next();
+            if (p.username.contains(token)|| p.fullName.contains(token))
+                ps.add(p);
+        }
+        return ps;
     }
 }

@@ -2,11 +2,13 @@ package Client;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 
 import javax.swing.text.html.ListView;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,6 +130,24 @@ public class ClientHandler implements Runnable{
                 else if (clientMessage.equals("Home"))
                 {
                     refreshClientOwner(profileFinder(username));
+                }
+                else if (clientMessage.equals("Search"))
+                {
+                    refreshClientOwner(profileFinder(username));
+                    String userCommand;
+                    do{
+                        userCommand = clientInputStream.readUTF();
+                        if (userCommand.contains("Pofile")) {
+                            String searchedToken = userCommand.split(":", 2)[1];
+                            if (searchedToken.length() > 2)
+                            {
+                                ArrayList<Profile> searchedProfile = Server.search(searchedToken);
+                                clientOutputStream.writeObject(searchedProfile);
+                                clientOutputStream.flush();
+                            }
+                        }
+
+                    }while (!userCommand.equals("Exit"));
                 }
             }while (!clientMessage.equals("Exit"));
 
