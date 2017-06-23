@@ -74,7 +74,7 @@ public class profilePage1Controller implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        profilePicture.setFill(new ImagePattern(new Image(Client.profileOwner.profilePicture.getAbsolutePath())));
+        profilePicture.setFill(new ImagePattern(new Image(Client.profileOwner.profilePicture.toURI().toString())));
         fullName.setText(Client.profileOwner.fullName);
         biography.setText(Client.profileOwner.biography);
         followerNum.setText(Integer.toString(Client.profileOwner.followers.size()));

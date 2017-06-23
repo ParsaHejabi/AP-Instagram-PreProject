@@ -16,7 +16,6 @@
             <Font name="Helvetica" size="25.0" />
          </font>
       </Label>
-      <Button layoutX="207.0" layoutY="26.0" mnemonicParsing="false" onAction="#refreshProfile" text="Refresh" />
         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0">
             <image>
                 <Image url="@Assets/optionsButton.png" />
