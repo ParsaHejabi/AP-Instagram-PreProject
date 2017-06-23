@@ -86,7 +86,7 @@
                 <Image url="@Assets/offHome.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="56.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="131.0" AnchorPane.rightAnchor="464.0" AnchorPane.topAnchor="892.0">
+        <ImageView fitHeight="56.0" fitWidth="56.0" onMouseClicked="#goToSearch" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="131.0" AnchorPane.rightAnchor="464.0" AnchorPane.topAnchor="892.0">
             <image>
                 <Image url="@Assets/offExplore.png" />
             </image>

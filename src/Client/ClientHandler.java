@@ -95,8 +95,10 @@ public class ClientHandler implements Runnable{
                         else if (pictureStatus.equals("Skip"))
                         {
                             File file = new File(Server.profilesDir, username+"/");
+                            file.mkdirs();
                             File profilePic = new File(file,"profilePic");
-                            File defaultProfilePic = new File("Assets/defaultProfilePicture.png");
+                            profilePic.createNewFile();
+                            File defaultProfilePic = new File("src/Client/Assets/defaultProfilePicture.png");
                             Files.write(profilePic.toPath(), Files.readAllBytes(defaultProfilePic.toPath()));
                             profile = new Profile(email,password,username,fullName,biography, profilePic);
                         }
@@ -137,7 +139,7 @@ public class ClientHandler implements Runnable{
                     String userCommand;
                     do{
                         userCommand = clientInputStream.readUTF();
-                        if (userCommand.contains("Pofile")) {
+                        if (userCommand.contains("Profile")) {
                             String searchedToken = userCommand.split(":", 2)[1];
                             if (searchedToken.length() > 2)
                             {

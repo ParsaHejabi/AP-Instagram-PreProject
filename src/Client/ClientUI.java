@@ -13,7 +13,6 @@ public class ClientUI extends Application{
     static Scene mainScene;
 
 
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         Client.connect(Server.SERVER_PORT);

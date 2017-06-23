@@ -72,6 +72,15 @@ public class profilePage1Controller implements Initializable{
 
     }
 
+    public void goToSearch() throws IOException, ClassNotFoundException {
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("searchPage.fxml")));
+        scene.getStylesheets().add("Stylesheet/style.css");
+        ClientUI.sceneChanger(scene, "Search");
+        Client.clientOutputStream.writeUTF("Search");
+        Client.clientOutputStream.flush();
+        Client.refreshOwner();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         profilePicture.setFill(new ImagePattern(new Image(Client.profileOwner.profilePicture.toURI().toString())));
