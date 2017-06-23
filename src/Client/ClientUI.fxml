@@ -16,7 +16,7 @@
             <Image url="@Assets/Instagram_logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="goToSignUpButton" layoutX="20.0" layoutY="511.0" mnemonicParsing="false" onAction="#goToSignUpPage" prefHeight="50.0" style="-fx-background-color: #3897f0;" text="Sign up with email or username" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+      <Button fx:id="goToSignUpButton" layoutX="20.0" layoutY="511.0" mnemonicParsing="false" onAction="#goToSignUpPage" prefHeight="50.0" style="-fx-background-color: #3897f0;" text="Sign up with email and username" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <font>
             <Font name="Helvetica Bold" size="15.0" />
          </font>

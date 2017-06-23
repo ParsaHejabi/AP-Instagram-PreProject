@@ -26,7 +26,7 @@
             <Font name="Helvetica" size="15.0" />
          </font>
       </TextArea>
-        <Button fx:id="finishSignUpButton" layoutX="20.0" layoutY="771.0" mnemonicParsing="false" onAction="#signUp2" prefHeight="50.0" style="-fx-background-color: #3897f0;" text="Finish Sign up" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+        <Button fx:id="finishSignUpButton" layoutX="20.0" layoutY="771.0" mnemonicParsing="false" onAction="#signUp2" prefHeight="50.0" style="-fx-background-color: #3897f0;" text="Next" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <font>
                 <Font name="Helvetica Bold" size="15.0" />
             </font>

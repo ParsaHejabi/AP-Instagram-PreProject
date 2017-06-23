@@ -34,9 +34,8 @@ public class searchPageController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        System.out.println("Salam");
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            Client.sendMessage("Profile:"+newValue);
+            Client.sendMessage("SearchProfile:"+newValue);
             if(newValue.length()>2) {
                 try {
                     searchedProfile = ((ArrayList<Profile>) Client.clientInputStream.readObject());
@@ -58,22 +57,41 @@ public class searchPageController implements Initializable{
         searchResult.getItems().clear();
         System.out.println("search res ->" );
         for (Profile p : searchedProfile) {
-            HBox hBox = new HBox(45);
+            HBox hBox = new HBox(35);
             hBox.setAlignment(Pos.CENTER_LEFT);
             Circle profilePicture = new Circle(50, new ImagePattern(new Image(p.profilePicture.toURI().toString())));
             Hyperlink usernameHyperLink = new Hyperlink(p.username);
             usernameHyperLink.setStyle("-fx-font-family: Helvetica;" +
                     "-fx-font-size: 20;" +
-                    "-fx-font-weight: bold;");
+                    "-fx-font-weight: bold;" +
+                    "-fx-color:black");
             usernameHyperLink.setAlignment(Pos.CENTER_LEFT);
+            usernameHyperLink.setOnAction(event -> {
+                try {
+                    Client.clientOutputStream.writeUTF("People:" + p.username);
+                    Client.clientOutputStream.flush();
+                    goToPeople();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
             Label fullnameLabel = new Label(p.fullName);
             fullnameLabel.setAlignment(Pos.CENTER_LEFT);
             fullnameLabel.setStyle("-fx-font-family: Helvetica;" +
-                    "-fx-font-size: 17;");
+                    "-fx-font-size: 15;");
             hBox.getChildren().addAll(profilePicture, usernameHyperLink, fullnameLabel);
             searchResult.getItems().add(hBox);
             System.out.println("\t"+p.fullName + " is full name and username is"+ p.username);
         }
+    }
+
+    private void goToPeople() throws IOException, ClassNotFoundException {
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("peoplePage.fxml")));
+        scene.getStylesheets().add("Stylesheet/style.css");
+        ClientUI.sceneChanger(scene, "People");
+        Client.refreshOwner();
     }
 
     public void goToHome() throws IOException, ClassNotFoundException {

@@ -29,7 +29,7 @@
                 <Font name="Helvetica Bold" size="17.0" />
             </font>
         </Button>
-      <Button layoutX="20.0" layoutY="601.0" mnemonicParsing="false" onAction="#signUp3" prefHeight="55.0" style="-fx-background-color: #3897f0;" text="Next" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+      <Button layoutX="20.0" layoutY="601.0" mnemonicParsing="false" onAction="#signUp3" prefHeight="55.0" style="-fx-background-color: #3897f0;" text="Finish Sign up" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <font>
             <Font name="Helvetica Bold" size="17.0" />
          </font>

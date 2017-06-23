@@ -139,7 +139,7 @@ public class ClientHandler implements Runnable{
                     String userCommand;
                     do{
                         userCommand = clientInputStream.readUTF();
-                        if (userCommand.contains("Profile")) {
+                        if (userCommand.contains("SearchProfile")) {
                             String searchedToken = userCommand.split(":", 2)[1];
                             if (searchedToken.length() > 2)
                             {
@@ -147,6 +147,29 @@ public class ClientHandler implements Runnable{
                                 clientOutputStream.writeObject(searchedProfile);
                                 clientOutputStream.flush();
                             }
+                        }
+                        else if (userCommand.contains("People")){
+                            String peopleUserName = userCommand.split(":", 2)[1];
+                            Profile profile = profileFinder(peopleUserName);
+                            Profile requestedProfile = profileFinder(username);
+                            clientOutputStream.writeObject(profile);
+                            clientOutputStream.flush();
+                            refreshClientOwner(requestedProfile);
+                            do {
+                                String followUnfollowRequest = clientInputStream.readUTF();
+                                if (followUnfollowRequest.equals("Follow")){
+                                    requestedProfile.following.add(profile);
+                                    profile.followers.add(requestedProfile);
+                                    Server.serialize(profile);
+                                    refreshClientOwner(requestedProfile);
+                                }
+                                else if (followUnfollowRequest.equals("Unfollow")){
+                                    requestedProfile.following.remove(profile);
+                                    profile.followers.remove(requestedProfile);
+                                    Server.serialize(profile);
+                                    refreshClientOwner(requestedProfile);
+                                }
+                            }while (!userCommand.equals("Exit"));
                         }
 
                     }while (!userCommand.equals("Exit"));
