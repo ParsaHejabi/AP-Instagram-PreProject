@@ -2,18 +2,24 @@ package Client;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
-import java.awt.*;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Created by Movahed on 6/23/2017.
  */
-public class ProgramActivityController {
+public class profilePage1Controller implements Initializable{
+
+
+
 
     @FXML
     private Circle profilePicture;
@@ -37,16 +43,6 @@ public class ProgramActivityController {
         Client.clientOutputStream.writeUTF("Profile1");
         Client.clientOutputStream.flush();
         Client.refreshOwner();
-        profilePicture.setFill(new ImagePattern(new Image(Client.profileOwner.profilePicture.getAbsolutePath())));
-        fullName.setText(Client.profileOwner.fullName);
-        biography.setText(Client.profileOwner.biography);
-        followerNum.setText(Integer.toString(Client.profileOwner.followers.size()));
-        followingNum.setText(Integer.toString(Client.profileOwner.following.size()));
-        postNum.setText(Integer.toString(Client.profileOwner.posts.size()));
-        username.setText(Client.profileOwner.username);
-
-
-
     }
     public void goToProfile2() throws IOException, ClassNotFoundException
     {
@@ -76,6 +72,14 @@ public class ProgramActivityController {
 
     }
 
-
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+//        profilePicture.setFill(new ImagePattern(new Image(Client.profileOwner.profilePicture.getAbsolutePath())));
+        fullName.setText(Client.profileOwner.fullName);
+        biography.setText(Client.profileOwner.biography);
+        followerNum.setText(Integer.toString(Client.profileOwner.followers.size()));
+        followingNum.setText(Integer.toString(Client.profileOwner.following.size()));
+        postNum.setText(Integer.toString(Client.profileOwner.posts.size()));
+        username.setText(Client.profileOwner.username);
+    }
 }

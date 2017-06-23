@@ -129,7 +129,7 @@ public class ClientHandler implements Runnable{
                 {
                     refreshClientOwner(profileFinder(username));
                 }
-            }while (clientMessage.equals("Exit"));
+            }while (!clientMessage.equals("Exit"));
 
             System.out.println(Thread.currentThread().getName() + " is closed!");
         }catch (Exception e){
