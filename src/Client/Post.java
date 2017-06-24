@@ -9,6 +9,7 @@ import java.util.Date;
  * Created by parsahejabi on 6/21/17.
  */
 public class Post implements Comparable,Serializable {
+    static public final String POST_NAME = "Post";
     Profile owner;
     Date uploadDate;
     File image;
@@ -35,4 +36,5 @@ public class Post implements Comparable,Serializable {
         this.image = image;
         this.caption = caption;
     }
+
 }

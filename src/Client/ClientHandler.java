@@ -132,7 +132,35 @@ public class ClientHandler implements Runnable{
                 }
                 else if (clientMessage.equals("Home"))
                 {
-                    refreshClientOwner(profileFinder(username));
+                    Profile currentClient = profileFinder(username);
+                    refreshClientOwner(currentClient);
+                    ArrayList<Post> sendPost = new ArrayList<>();
+                    for (Profile followingProfile: currentClient.following)
+                    {
+                        for(Post post: followingProfile.posts)
+                        {
+                            sendPost.add(post);
+                        }
+                    }
+                    for (Post post: currentClient.posts)
+                    {
+                        sendPost.add(post);
+                    }
+                    sendPost.sort(null);
+
+                    clientOutputStream.reset();
+                    clientOutputStream.writeObject(sendPost);
+                    clientOutputStream.flush();
+                    clientMessage = clientInputStream.readUTF();
+                    if(clientMessage.contains("Like"))
+                    {
+
+                    }
+                    if(clientMessage.contains("Comment"))
+                    {
+
+                    }
+
                 }
                 else if (clientMessage.equals("Search"))
                 {
