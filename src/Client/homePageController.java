@@ -57,6 +57,7 @@ public class homePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
+
             Client.refreshOwner();
             postArrayList = ((ArrayList<Post>) Client.clientInputStream.readObject());
         } catch (IOException e) {
@@ -75,9 +76,9 @@ public class homePageController implements Initializable {
             postImageView.setFitWidth(500);
             postImageView.setFitHeight(500);
             HBox postButtonsHBox = new HBox(10);
-            ImageView likeButtonImageView = new ImageView("Assets/likeButton.png");
+            ImageView likeButtonImageView = new ImageView("Client/Assets/likeButton.png");
             if (p.canComment){
-                ImageView commentButtonImageView = new ImageView("Assets/commentButton.png");
+                ImageView commentButtonImageView = new ImageView("Client/Assets/commentButton.png");
                 postButtonsHBox.getChildren().addAll(likeButtonImageView, commentButtonImageView);
             }
             else {

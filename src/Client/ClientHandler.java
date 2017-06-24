@@ -123,7 +123,7 @@ public class ClientHandler implements Runnable{
             do {
                 System.out.println("raftam to barname");
                 clientMessage = clientInputStream.readUTF();
-                System.out.println("khoondam readUTF");
+                System.out.println("khoondam readUTF "+clientMessage);
                 if (clientMessage.equals("Profile1"))
                 {
                     refreshClientOwner(profileFinder(username));
@@ -153,7 +153,7 @@ public class ClientHandler implements Runnable{
                     clientOutputStream.reset();
                     clientOutputStream.writeObject(sendPost);
                     clientOutputStream.flush();
-                    clientMessage = clientInputStream.readUTF();
+
                     if(clientMessage.contains("Like"))
                     {
 
