@@ -121,7 +121,9 @@ public class ClientHandler implements Runnable{
 
             }while (!clientMessage.equals("Exit"));
             do {
+                System.out.println("raftam to barname");
                 clientMessage = clientInputStream.readUTF();
+                System.out.println("khoondam readUTF");
                 if (clientMessage.equals("Profile1"))
                 {
                     refreshClientOwner(profileFinder(username));
@@ -263,7 +265,7 @@ public class ClientHandler implements Runnable{
         return false;
     }
 
-    private Profile profileFinder(String usernameOrEmail){
+     static Profile profileFinder(String usernameOrEmail){
         for (Profile p:Server.profiles){
             if (isEmailValid(usernameOrEmail)){
                 if (usernameOrEmail.equals(p.email)){

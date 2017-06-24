@@ -56,6 +56,15 @@ public class homePageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            Client.refreshOwner();
+            postArrayList = ((ArrayList<Post>) Client.clientInputStream.readObject());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         for (Post p:postArrayList){
             VBox post = new VBox(20);
             HBox postOwnerHBox = new HBox(30);

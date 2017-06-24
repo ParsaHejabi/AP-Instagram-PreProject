@@ -23,11 +23,14 @@ public class Server {
     static File profilesDir = new File("Profiles/");
 
     public static void main(String[] args) throws IOException {
+
         try {
+
             serverSocket = new ServerSocket(SERVER_PORT);
             profiles = new ArrayList<>();
             clients = new ArrayList<>();
             initializeProfiles();
+            postBesaz();
 
             while (true){
                 clientSocket = serverSocket.accept();
@@ -119,5 +122,20 @@ public class Server {
         }
         Post post = new Post(p, ax, caption, canComment);
         p.posts.add(post);
+        try {
+            serialize(p);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void postBesaz()
+    {
+        Profile profile = ClientHandler.profileFinder("alow");
+        for (int i = 0 ; i < 3; i++)
+        {
+            File f = new File("G:\\Pics\\IMAG036"+Integer.toString(i+4)+".jpg");
+            createPost(profile, f, true, "post"+Integer.toString(i+1));
+        }
     }
 }
