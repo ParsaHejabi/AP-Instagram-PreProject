@@ -30,7 +30,6 @@ public class Server {
             profiles = new ArrayList<>();
             clients = new ArrayList<>();
             initializeProfiles();
-            postBesaz();
 
             while (true){
                 clientSocket = serverSocket.accept();

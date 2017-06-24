@@ -120,8 +120,12 @@ public class ClientHandler implements Runnable{
                 }
 
             }while (!clientMessage.equals("Exit"));
+
+            refreshClientOwner(profileFinder(username));
+            sendPost(profileFinder(username));
+
             do {
-                System.out.println("raftam to barname");
+                System.out.println("avale halaghe login");
                 clientMessage = clientInputStream.readUTF();
                 System.out.println("khoondam readUTF "+clientMessage);
                 if (clientMessage.equals("Profile1"))
@@ -134,25 +138,8 @@ public class ClientHandler implements Runnable{
                 }
                 else if (clientMessage.equals("Home"))
                 {
-                    Profile currentClient = profileFinder(username);
-                    refreshClientOwner(currentClient);
-                    ArrayList<Post> sendPost = new ArrayList<>();
-                    for (Profile followingProfile: currentClient.following)
-                    {
-                        for(Post post: followingProfile.posts)
-                        {
-                            sendPost.add(post);
-                        }
-                    }
-                    for (Post post: currentClient.posts)
-                    {
-                        sendPost.add(post);
-                    }
-                    sendPost.sort(null);
-
-                    clientOutputStream.reset();
-                    clientOutputStream.writeObject(sendPost);
-                    clientOutputStream.flush();
+                    refreshClientOwner(profileFinder(username));
+                    sendPost(profileFinder(username));
 
                     if(clientMessage.contains("Like"))
                     {
@@ -231,6 +218,7 @@ public class ClientHandler implements Runnable{
     private void login(String usernameOrEmail) throws IOException {
         Profile p = profileFinder(usernameOrEmail);
         username = p.username;
+        clientOutputStream.reset();
         clientOutputStream.writeObject(p);
         clientOutputStream.flush();
     }
@@ -289,5 +277,27 @@ public class ClientHandler implements Runnable{
         clientOutputStream.flush();
         System.out.println(profile.following);
 
+    }
+
+    private void sendPost(Profile currentClient) throws IOException
+    {
+
+        ArrayList<Post> sendPost = new ArrayList<>();
+        for (Profile followingProfile: currentClient.following)
+        {
+            for(Post post: followingProfile.posts)
+            {
+                sendPost.add(post);
+            }
+        }
+        for (Post post: currentClient.posts)
+        {
+            sendPost.add(post);
+        }
+        sendPost.sort(null);
+
+        clientOutputStream.reset();
+        clientOutputStream.writeObject(sendPost);
+        clientOutputStream.flush();
     }
 }

@@ -144,8 +144,7 @@ public class ClientUIController {
         boolean serverResponse = Client.clientInputStream.readBoolean();
         if (serverResponse){
             Client.profileOwner = (Profile) clientInputStream.readObject();
-            Client.clientOutputStream.writeUTF("Home");
-            Client.clientOutputStream.flush();
+
             Scene scene = new Scene(FXMLLoader.load(getClass().getResource("homePage.fxml")));
             scene.getStylesheets().add("Stylesheet/style.css");
             ClientUI.sceneChanger(scene, "Home");
