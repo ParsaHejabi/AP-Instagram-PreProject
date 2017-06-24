@@ -92,14 +92,17 @@ public class Server {
         fileOutputStream.close();
     }
 
-    static ArrayList<Profile> search(String token)
+    static ArrayList<Profile> search(String token, Profile searchingClient)
     {
         ArrayList<Profile> ps = new ArrayList<>(5);
         Iterator<Profile> it = profiles.iterator();
         while (ps.size()<5 && it.hasNext())
         {
             Profile p = it.next();
+            if (p.equals(searchingClient))
+                continue;
             if (p.username.contains(token)|| p.fullName.contains(token))
+
                 ps.add(p);
         }
         return ps;

@@ -146,7 +146,8 @@ public class ClientHandler implements Runnable{
                             String searchedToken = userCommand.split(":", 2)[1];
                             if (searchedToken.length() > 2)
                             {
-                                ArrayList<Profile> searchedProfile = Server.search(searchedToken);
+                                Profile searchingClient = profileFinder(username);
+                                ArrayList<Profile> searchedProfile = Server.search(searchedToken, searchingClient);
                                 clientOutputStream.reset();
                                 clientOutputStream.writeObject(searchedProfile);
                                 clientOutputStream.flush();
