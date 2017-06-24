@@ -38,6 +38,7 @@ public class searchPageController implements Initializable{
             Client.sendMessage("SearchProfile:"+newValue);
             if(newValue.length()>2) {
                 try {
+
                     searchedProfile = ((ArrayList<Profile>) Client.clientInputStream.readObject());
                     showSearchRes();
                 } catch (IOException e) {
@@ -55,7 +56,7 @@ public class searchPageController implements Initializable{
     public void showSearchRes()
     {
         searchResult.getItems().clear();
-        System.out.println("search res ->" );
+
         for (Profile p : searchedProfile) {
             HBox hBox = new HBox(35);
             hBox.setAlignment(Pos.CENTER_LEFT);
@@ -68,9 +69,8 @@ public class searchPageController implements Initializable{
             usernameHyperLink.setAlignment(Pos.CENTER_LEFT);
             usernameHyperLink.setOnAction(event -> {
                 try {
-                    Client.clientOutputStream.writeUTF("People:" + p.username);
-                    Client.clientOutputStream.flush();
-                    goToPeople();
+
+                    goToPeople(p);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -83,15 +83,17 @@ public class searchPageController implements Initializable{
                     "-fx-font-size: 15;");
             hBox.getChildren().addAll(profilePicture, usernameHyperLink, fullnameLabel);
             searchResult.getItems().add(hBox);
-            System.out.println("\t"+p.fullName + " is full name and username is"+ p.username);
+
         }
     }
 
-    private void goToPeople() throws IOException, ClassNotFoundException {
+    private void goToPeople(Profile p) throws IOException, ClassNotFoundException {
+        Client.clientOutputStream.writeUTF("People:" + p.username);
+        Client.clientOutputStream.flush();
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("peoplePage.fxml")));
         scene.getStylesheets().add("Stylesheet/style.css");
         ClientUI.sceneChanger(scene, "People");
-        Client.refreshOwner();
+
     }
 
     public void goToHome() throws IOException, ClassNotFoundException {

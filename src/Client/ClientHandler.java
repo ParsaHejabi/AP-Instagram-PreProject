@@ -1,5 +1,6 @@
 package Client;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -137,39 +138,53 @@ public class ClientHandler implements Runnable{
                 {
                     refreshClientOwner(profileFinder(username));
                     String userCommand;
+                    System.out.println("in search mode");
                     do{
                         userCommand = clientInputStream.readUTF();
+
                         if (userCommand.contains("SearchProfile")) {
                             String searchedToken = userCommand.split(":", 2)[1];
                             if (searchedToken.length() > 2)
                             {
                                 ArrayList<Profile> searchedProfile = Server.search(searchedToken);
+                                clientOutputStream.reset();
                                 clientOutputStream.writeObject(searchedProfile);
                                 clientOutputStream.flush();
                             }
                         }
-                        else if (userCommand.contains("People")){
-                            String peopleUserName = userCommand.split(":", 2)[1];
-                            Profile profile = profileFinder(peopleUserName);
-                            Profile requestedProfile = profileFinder(username);
-                            clientOutputStream.writeObject(profile);
+                        if(userCommand.contains("People"))
+                        {
+                            Profile currentClient = profileFinder(username);
+                            refreshClientOwner(currentClient);
+                            String peopleUsername = userCommand.split(":", 2)[1];
+                            Profile requestedProfile = profileFinder(peopleUsername);
+                            clientOutputStream.reset();
+                            clientOutputStream.writeObject(requestedProfile);
                             clientOutputStream.flush();
-                            refreshClientOwner(requestedProfile);
-                            do {
-                                String followUnfollowRequest = clientInputStream.readUTF();
-                                if (followUnfollowRequest.equals("Follow")){
-                                    requestedProfile.following.add(profile);
-                                    profile.followers.add(requestedProfile);
-                                    Server.serialize(profile);
-                                    refreshClientOwner(requestedProfile);
+
+
+                            userCommand = clientInputStream.readUTF();
+                            if (userCommand.contains("FollowUnfollow"))
+                            {
+                                if(currentClient.following.contains(requestedProfile))
+                                {
+                                    System.out.println("yes");
+                                    currentClient.following.remove(requestedProfile);
+                                    requestedProfile.followers.remove(currentClient);
+                                    Server.serialize(requestedProfile);
+                                    Server.serialize(currentClient);
                                 }
-                                else if (followUnfollowRequest.equals("Unfollow")){
-                                    requestedProfile.following.remove(profile);
-                                    profile.followers.remove(requestedProfile);
-                                    Server.serialize(profile);
-                                    refreshClientOwner(requestedProfile);
+                                else {
+                                    System.out.println("no");
+                                    currentClient.following.add(requestedProfile);
+                                    requestedProfile.followers.add(currentClient);
+                                    Server.serialize(requestedProfile);
+                                    Server.serialize(currentClient);
                                 }
-                            }while (!userCommand.equals("Exit"));
+                            }
+
+
+
                         }
 
                     }while (!userCommand.equals("Exit"));
@@ -238,8 +253,10 @@ public class ClientHandler implements Runnable{
     private void refreshClientOwner(Profile profile) throws IOException
     {
         Server.serialize(profile);
+        clientOutputStream.reset();
         clientOutputStream.writeObject(profile);
         clientOutputStream.flush();
+        System.out.println(profile.following);
 
     }
 }

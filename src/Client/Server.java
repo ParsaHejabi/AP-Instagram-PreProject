@@ -77,8 +77,7 @@ public class Server {
         return p;
     }
     public static void serialize(Profile profile) throws IOException {
-        System.out.println("profilesDir = " + profilesDir);
-        System.out.println("profile.username = " + profile.username);
+        System.out.println("requestedProfile.username = " + profile.username);
         File f = new File(profilesDir,profile.username+"/" + profile.username);
         if(!f.createNewFile())
         {

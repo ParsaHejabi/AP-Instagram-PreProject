@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
  * Created by parsahejabi on 6/23/17.
  */
 public class peoplePageController implements Initializable {
-    static Profile profile;
+    static Profile requestedProfile;
     @FXML
     private Circle profilePicture;
     @FXML
@@ -38,70 +38,60 @@ public class peoplePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            profile = (Profile) Client.clientInputStream.readObject();
             Client.refreshOwner();
+
+
+            requestedProfile = ((Profile) Client.clientInputStream.readObject());
+            System.out.println("initilize seda shod");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        profilePicture.setFill(new ImagePattern(new Image(profile.profilePicture.toURI().toString())));
-        fullName.setText(profile.fullName);
-        biography.setText(profile.biography);
-        followerNum.setText(Integer.toString(profile.followers.size()));
-        followingNum.setText(Integer.toString(profile.following.size()));
-        postNum.setText(Integer.toString(profile.posts.size()));
-        username.setText(profile.username);
-        if (Client.profileOwner.following.contains(profile)){
+
+
+        profilePicture.setFill(new ImagePattern(new Image(requestedProfile.profilePicture.toURI().toString())));
+        fullName.setText(requestedProfile.fullName);
+        biography.setText(requestedProfile.biography);
+        followerNum.setText(Integer.toString(requestedProfile.followers.size()));
+        followingNum.setText(Integer.toString(requestedProfile.following.size()));
+        postNum.setText(Integer.toString(requestedProfile.posts.size()));
+        username.setText(requestedProfile.username);
+
+        if (Client.profileOwner.following.contains(requestedProfile)){
+            System.out.println("no");
             followUnfollowButton.setText("Following");
             followUnfollowButton.setStyle("-fx-background-color:#f4f4f4;" +
                     "-fx-text-fill:black;" +
                     "-fx-border-color:black;");
         }
         else {
+            System.out.println("yes");
             followUnfollowButton.setText("Follow");
             followUnfollowButton.setStyle("-fx-background-color:#3897f0;" +
                     "-fx-text-fill:white;" +
                     "-fx-border-color:#3897f0");
         }
+
         followUnfollowButton.setOnAction(event -> {
-            if (Client.profileOwner.following.contains(profile)){
-                try {
-                    Client.clientOutputStream.writeUTF("Unfollow");
-                    Client.clientOutputStream.flush();
-                    Client.refreshOwner();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-                followUnfollowButton.setText("Follow");
-                followUnfollowButton.setStyle("-fx-background-color:#3897f0;" +
-                        "-fx-text-fill:white;" +
-                        "-fx-border-color:#3897f0");
+            try {
+                Client.clientOutputStream.writeUTF("FollowUnfollow");
+                goToPeople(requestedProfile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
-            else {
-                try {
-                    Client.clientOutputStream.writeUTF("Follow");
-                    Client.clientOutputStream.flush();
-                    Client.refreshOwner();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-                followUnfollowButton.setText("Following");
-                followUnfollowButton.setStyle("-fx-background-color:#f4f4f4;" +
-                        "-fx-text-fill:black;" +
-                        "-fx-border-color:black;");
-            }
+
         });
+
     }
 
     public void goToProfile1() throws IOException, ClassNotFoundException {
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("profilePage1.fxml")));
         scene.getStylesheets().add("Stylesheet/style.css");
         ClientUI.sceneChanger(scene, "Profile");
+        Client.clientOutputStream.writeUTF("Exit");
         Client.clientOutputStream.writeUTF("Profile1");
         Client.clientOutputStream.flush();
         Client.refreshOwner();
@@ -110,6 +100,7 @@ public class peoplePageController implements Initializable {
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("homePage.fxml")));
         scene.getStylesheets().add("Stylesheet/style.css");
         ClientUI.sceneChanger(scene, "Home");
+        Client.clientOutputStream.writeUTF("Exit");
         Client.clientOutputStream.writeUTF("Home");
         Client.clientOutputStream.flush();
         Client.refreshOwner();
@@ -121,8 +112,20 @@ public class peoplePageController implements Initializable {
         Scene scene = new Scene(FXMLLoader.load(getClass().getResource("searchPage.fxml")));
         scene.getStylesheets().add("Stylesheet/style.css");
         ClientUI.sceneChanger(scene, "Search");
-        Client.clientOutputStream.writeUTF("Search");
+        Client.clientOutputStream.writeUTF("Exit");
         Client.clientOutputStream.flush();
         Client.refreshOwner();
+    }
+
+    private void goToPeople(Profile p) throws IOException, ClassNotFoundException {
+
+        Client.clientOutputStream.writeUTF("People:" + p.username);
+        Client.clientOutputStream.flush();
+        System.out.println("ghable refresh");
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("peoplePage.fxml")));
+        System.out.println("bade refresh");
+        scene.getStylesheets().add("Stylesheet/style.css");
+        ClientUI.sceneChanger(scene, "People");
+
     }
 }
